@@ -33,9 +33,9 @@ classdef CessnaMasterEnvv2 < rl.env.MATLABEnvironment
             
             obj = obj@rl.env.MATLABEnvironment(obsInfo, actInfo);
             
-            % ==========================================================
+          
             % Python JSBSim Initialization
-            % ==========================================================
+            
             try
                 py.importlib.import_module('jsbsim');
             catch
@@ -135,9 +135,6 @@ classdef CessnaMasterEnvv2 < rl.env.MATLABEnvironment
             err_v = v_now - obj.TargetSpeed;
             Observation = [err_h/1000; h_dot/100; theta; q; phi_now; p_now; err_v/10; elev_pos];
             
-            % ==========================================================
-            % 5. PROGRESSIVE DENSE REWARD FUNCTION (h_dot tracking)
-            % ==========================================================
             
             % (A) Calculate Target Vertical Velocity (Outer Loop)
             target_h_dot = -(err_h * 0.05); 
@@ -158,12 +155,10 @@ classdef CessnaMasterEnvv2 < rl.env.MATLABEnvironment
             % (D) Bankrupting the Vibration Exploit (THE CHATTER CRUSHER)
             raw_smooth_penalty = (delta_agent_elev^2) * 10.0;
             
-            % THE FIX: Cap the penalty at 3.0 to bound the math and prevent gradient starvation
-            capped_smooth_penalty = min(raw_smooth_penalty, 3.0); 
             
             Reward = Reward - capped_smooth_penalty;
             
-            % Penalize physical stick movement (stick pumping)
+            % Penalise physical stick movement 
             % delta_elev was computed on line 113 BEFORE PrevElev was updated
             Reward = Reward - (abs(delta_elev) * 1.0); 
             
@@ -226,9 +221,8 @@ classdef CessnaMasterEnvv2 < rl.env.MATLABEnvironment
             obj.PrevElev = 0; % Reset physical smoothness tracker
             obj.PrevAgentElev = 0; % Reset brain smoothness tracker
             
-            % ==============================================
+
             % DOMAIN CONFIGURATION BASED ON CURRICULUM PHASE
-            % ==============================================
             if obj.CurriculumPhase == 1
                 % PHASE 1: DETERMINISTIC SPAWN. 
                 random_alt = 4000;
