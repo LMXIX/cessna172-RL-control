@@ -1,5 +1,5 @@
 %% Curriculum Phase 2: Wind Disturbances
-% This script loads the perfectly converged Phase 1 Still-Air Agent
+% This script loads the perfectly converged Phase 1 no-wind Agent
 % and begins training it against severe environmental wind turbulence.
 
 clear all; clc; rng('shuffle');
@@ -13,30 +13,23 @@ agent = loaded_data.(fields{1});
 disp('Creating Simulation Environment (Phase 2)...');
 env = CessnaMasterEnvv2();
 
-% CRITICAL: Phase 2 Activates Domain Randomization & Wind
+% Phase 2 Activates Domain Randomization & Wind
 env.CurriculumPhase = 2;
 
 % Obtain action and observation information
 obsInfo = getObservationInfo(env);
 actInfo = getActionInfo(env);
 
-% -------------------------------------------------------------
-% REFINING PPO HYPERPARAMETERS FOR EXISTING KNOWLEDGE
-% -------------------------------------------------------------
 % The agent is already an expert at flying. We DO NOT want it to 
 % "explore" by crashing the plane. We want it to politely adapt its 
 % existing smooth control laws to fight the wind.
 agent.AgentOptions.EntropyLossWeight = 0.0005; % Barely any random exploration
 agent.AgentOptions.ClipFactor = 0.02;          % Do not allow massive policy updates
 
-% ULTRA SLOW LEARNING RATE: 1e-5. 
-% We want to carefully curve the existing weights, not overwrite them.
+% We want to carefully curve the existing weights
 agent.AgentOptions.CriticOptimizerOptions.LearnRate = 1e-5;
 agent.AgentOptions.ActorOptimizerOptions.LearnRate = 1e-5; 
 
-% -------------------------------------------------------------
-% TRAINING PARAMETERS
-% -------------------------------------------------------------
 trainOpts = rlTrainingOptions(...
     'MaxEpisodes', 20000, ...            
     'MaxStepsPerEpisode', 3000, ...     
@@ -54,9 +47,7 @@ if ~exist('curriculum_models/Phase2', 'dir')
     mkdir('curriculum_models/Phase2');
 end
 
-% -------------------------------------------------------------
-% START TRAINING
-% -------------------------------------------------------------
+
 disp('Starting Curriculum Phase 2 Training (Wind Turbulence active)...');
 trainingStats = train(agent, env, trainOpts);
 
