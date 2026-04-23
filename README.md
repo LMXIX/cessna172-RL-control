@@ -41,17 +41,17 @@ cessna172-rl-control/
 
 ### Evaluation Scripts → Dissertation Sections
 
-| Script | Dissertation Section | Description |
-|--------|---------------------|-------------|
-| `evaluation/step_climb.m` | §4.2 | 500ft step-climb transient response |
-| `evaluation/turbulence_sweep.m` | §4.3 | Severity 1–5 sweep with 10-run MC |
-| `evaluation/severe_turbulence.m` | §4.4 | Severity 5 detailed time-series |
-| `evaluation/wind_shear.m` | §4.5 | Microburst wind shear penetration |
-| `evaluation/elevator_icing.m` | §4.6 | Elevator icing + downdraft (key finding) |
-| `monte_carlo/step_climb_mc.m` | §4.2 | Parametric MC — CG/payload variation |
-| `monte_carlo/severe_turbulence_mc.m` | §4.4 | Stochastic MC — 10 seed realisations |
-| `monte_carlo/wind_shear_mc.m` | §4.5 | Adversarial MC — randomised onset/severity |
-| `monte_carlo/icing_authority_sweep.m` | §4.6 | Authority sweep — 80% down to 15% |
+| Script | Description |
+|--------|-------------|
+| `evaluation/step_climb.m` | 500ft step-climb transient response |
+| `evaluation/turbulence_sweep.m` | Severity 1–5 sweep with 10-run MC |
+| `evaluation/severe_turbulence.m` | Severity 5 detailed time-series |
+| `evaluation/wind_shear.m` | Microburst wind shear penetration |
+| `evaluation/elevator_icing.m` | Elevator icing + downdraft (key finding) |
+| `monte_carlo/step_climb_mc.m` | Parametric MC — CG/payload variation |
+| `monte_carlo/severe_turbulence_mc.m` | Stochastic MC — 10 seed realisations |
+| `monte_carlo/wind_shear_mc.m` | Adverse MC — randomised onset/severity |
+| `monte_carlo/icing_authority_sweep.m` | Elevator Authority sweep — 80% down to 40% |
 
 ## Quick Start
 
@@ -72,10 +72,10 @@ The agent was trained using a 4-phase curriculum:
 
 | Phase | Ailerons | Throttle | Turbulence | Episodes |
 |-------|----------|----------|------------|----------|
-| 1 | 0% | Fixed 80% | Severity 1 | 500 |
-| 2 | 50% | Fixed 80% | Severity 1–2 | 500 |
-| 3 | 100% | Fixed 80% | Severity 1–3 | 500 |
-| 4 | 100% | 100% (learned) | Severity 1–4 | 1000 |
+| 1 | 0% | Fixed 80% | Severity 1 | 1200 |
+| 2 | 50% | Fixed 80% | Severity 1–2 | 3500 |
+| 3 | 100% | Fixed 80% | Severity 1–3 | 5000 |
+| 4 | 100% | 100% (learned) | Severity 1–4 | 5460 |
 
 Followed by conservative fine-tuning with a reduced learning rate.
 
