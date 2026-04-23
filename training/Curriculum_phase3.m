@@ -13,14 +13,14 @@ agent = loaded_data.(fields{1});
 disp('Creating Simulation Environment (Phase 3)...');
 env = CessnaMasterEnvv2();
 
-% CRITICAL: Phase 3 Activates 50% Agent Authority / 50% PID
+% Phase 3 Activates 50% Agent Authority / 50% PID
 env.CurriculumPhase = 3;
 
 % Obtain action and observation information
 obsInfo = getObservationInfo(env);
 actInfo = getActionInfo(env);
 
-% REFINING PPO HYPERPARAMETERS FOR EXPANDED AUTHORITY
+% REFINING PPO
 % It already knows what to do, it just needs to recalibrate the 
 % magnitude of its pushes. We maintain the ultra-slow learning rate
 % so it doesn't violently overwrite its knowledge.
